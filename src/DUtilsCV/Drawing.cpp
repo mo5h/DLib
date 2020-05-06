@@ -28,7 +28,7 @@ void Drawing::drawKeyPoints(cv::Mat &image,
     cv::Scalar(0, 0, 255),
     cv::Scalar(0, 255, 0),
     cv::Scalar(255, 0, 0),
-    cv::Scalar(255, 255, 255) 
+    cv::Scalar(255, 255, 255)
   };
 
   const double PI = 3.14159265;
@@ -116,49 +116,41 @@ void Drawing::drawCorrespondences(cv::Mat &image, const cv::Mat &img1,
   Drawing::drawKeyPoints(aux2, kp2);
 
   cv::Mat im = cv::Mat::zeros(rows, cols, CV_8UC1);
-  IplImage ipl_im = IplImage(im);
-  IplImage* ipl_ret = &ipl_im;
 
-  CvRect roi;
+  cv::Rect roi;
   roi.x = 0;
   roi.y = 0;
   roi.width = img1.cols;
   roi.height = img1.rows;
-	
-  cvSetImageROI(ipl_ret, roi);
-  IplImage ipl_aux1 = IplImage(aux1);
-  cvCopy(&ipl_aux1, ipl_ret);
+
+  im(roi) = aux1 * 1;
   
   roi.x = 0;
   roi.y = img1.rows;
   roi.width = img2.cols;
   roi.height = img2.rows;
-	
-  cvSetImageROI(ipl_ret, roi);
-  IplImage ipl_aux2 = IplImage(aux2);
-  cvCopy(&ipl_aux2, ipl_ret);
 
-	cvResetImageROI(ipl_ret);
+  im(roi) = aux2 * 1;
 
-	// draw correspondences
-	cv::cvtColor(im, image, CV_GRAY2RGB);
-	
-	for(unsigned int i = 0; i < c1.size(); ++i)
-	{
-	  int mx = (int)kp1[ c1[i] ].pt.x;
-	  int my = (int)kp1[ c1[i] ].pt.y;
-	  int px = (int)kp2[ c2[i] ].pt.x;
-	  int py = (int)kp2[ c2[i] ].pt.y;
-	  
-	  py += img1.rows;
-	  
-    cv::Scalar color = cv::Scalar( 
+  // draw correspondences
+  cv::cvtColor(im, image, cv::COLOR_GRAY2RGB);
+
+  for(unsigned int i = 0; i < c1.size(); ++i)
+  {
+    int mx = (int)kp1[ c1[i] ].pt.x;
+    int my = (int)kp1[ c1[i] ].pt.y;
+    int px = (int)kp2[ c2[i] ].pt.x;
+    int py = (int)kp2[ c2[i] ].pt.y;
+
+    py += img1.rows;
+
+    cv::Scalar color = cv::Scalar(
       int(((double)rand()/((double)RAND_MAX + 1.0)) * 256.0),
       int(((double)rand()/((double)RAND_MAX + 1.0)) * 256.0),
       int(((double)rand()/((double)RAND_MAX + 1.0)) * 256.0));
 
     cv::line(image, cv::Point(mx, my), cv::Point(px, py), color, 1);
-	}
+  }
 }
 
 // ---------------------------------------------------------------------------
