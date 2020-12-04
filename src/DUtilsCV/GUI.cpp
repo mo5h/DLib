@@ -11,7 +11,7 @@
 #include <vector>
 #include <queue>
 
-#include <opencv/highgui.h>
+#include <opencv2/highgui.h>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
